@@ -33,8 +33,11 @@ namespace UIGenerator.ModelGenerator.Parameters
                 _name, 
                 _labelText, 
                 _defaultValue, 
-                s => _propertyInfo.SetValue(_model, s)
+                s => _propertyInfo.SetValue(_model, s),
+                s => true
             );
         }
+
+        public string Name => _name;
     }
 }

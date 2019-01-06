@@ -19,14 +19,12 @@ namespace UIGenerator.Views.Main {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        public MainPresenter presenter;
 
         public MainWindow() {
             InitializeComponent();
-            presenter = new MainPresenter(this);
         }
 
-        public void AddTextBox(string name, string labelText, string defaultValue, Action<string> onChange)
+        public void AddTextBox(string name, string labelText, string defaultValue, Action<string> onChange, Func<string, bool> isValid)
         {
             var element = new TextBox()
             {
@@ -38,7 +36,20 @@ namespace UIGenerator.Views.Main {
                 element.Text = defaultValue;
             }
 
-            element.TextChanged += (sender, args) => onChange(element.Text);
+            element.TextChanged += (sender, args) =>
+            {
+                if (isValid(element.Text))
+                {
+                    element.Background = Brushes.White;
+                }
+                else
+                {
+                    element.Background = Brushes.Red;
+                    return;
+                }
+                
+                onChange(element.Text);
+            };
             
             AddNewRow(labelText, element);
         }

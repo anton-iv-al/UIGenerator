@@ -52,5 +52,7 @@ namespace UIGenerator.ModelGenerator.Parameters
                 dlg.Method.Invoke(dlg.Target, eventParams);
             } 
         }
+
+        public string Name => _name;
     }
 }
