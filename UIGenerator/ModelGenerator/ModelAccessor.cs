@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UIGenerator.ModelGenerator.Parameters;
@@ -37,11 +38,16 @@ namespace UIGenerator.ModelGenerator
             IEnumerable<IModelParam> buttonParams = typeof(TModel).GetEvents()
                 .Select(ei => new ButtonParam(ei, model));
             
+            IEnumerable<IModelParam> feedBackStringParams = typeof(TModel).GetProperties()
+                .Where(pi => pi.PropertyType == typeof(Action<string>))
+                .Select(pi => new FeedbackStringParam(pi, model));
+            
             
             return stringParams
                 .Concat(intParams)
                 .Concat(doubleParams)
-                .Concat(buttonParams);
+                .Concat(buttonParams)
+                .Concat(feedBackStringParams);
         }
 
         private IEnumerable<IModelParam> SortedParams(IEnumerable<IModelParam> modelParams)

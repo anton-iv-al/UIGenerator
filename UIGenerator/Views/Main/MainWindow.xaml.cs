@@ -71,6 +71,20 @@ namespace UIGenerator.Views.Main {
             
             AddNewRow(labelText, element);
         }
+        
+        public Action<string> AddFeedbackLabel(string name, string labelText)
+        {
+            var element = new Label()
+            {
+                Name = name,
+                Content = labelText,
+                Foreground = Brushes.White,
+            };
+
+            AddNewRow(labelText, element);
+
+            return s => element.Content = s;
+        }
 
         private void AddNewRow(string labelText, FrameworkElement element)
         {

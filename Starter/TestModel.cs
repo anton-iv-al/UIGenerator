@@ -16,5 +16,7 @@ namespace Starter
         
         [DisplayName("label of Button1")]
         public event Action<TestModel> Button1;
+
+        public Action<string> SetResult { get; set; }
     }
 }

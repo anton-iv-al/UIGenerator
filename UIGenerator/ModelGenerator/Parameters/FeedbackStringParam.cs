@@ -1,11 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using UIGenerator.Views.Main;
 
 namespace UIGenerator.ModelGenerator.Parameters
 {
-    public class StringParam : IModelParam
+    public class FeedbackStringParam : IModelParam
     {
         private readonly string _name;
         private readonly string _labelText;
@@ -14,7 +15,7 @@ namespace UIGenerator.ModelGenerator.Parameters
         private readonly PropertyInfo _propertyInfo;
         private readonly object _model;
 
-        public StringParam(PropertyInfo propertyInfo, object model)
+        public FeedbackStringParam(PropertyInfo propertyInfo, object model)
         {
             var nameAttribute = propertyInfo.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
             var labelText = nameAttribute != null ? nameAttribute.DisplayName : propertyInfo.Name;
@@ -29,13 +30,15 @@ namespace UIGenerator.ModelGenerator.Parameters
 
         public void AddToWindow(MainWindow window)
         {
-            window.AddTextBox(
+            Action<string> setString = window.AddFeedbackLabel(
                 _name, 
-                _labelText, 
-                _value, 
-                s => _propertyInfo.SetValue(_model, s),
-                s => true
+                _labelText
             );
+
+            Action<string> dispatcherSetString = s => window.Dispatcher.Invoke(() => setString(s));
+
+            var delegateInstance = Delegate.CreateDelegate(typeof(Action<string>), dispatcherSetString.Target, dispatcherSetString.Method);
+            _propertyInfo.SetValue(_model, delegateInstance);
         }
 
         public string Name => _name;

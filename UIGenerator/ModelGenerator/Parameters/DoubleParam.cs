@@ -64,16 +64,5 @@ namespace UIGenerator.ModelGenerator.Parameters
         }
 
         public string Name => _name;
-
-        public string Value
-        {
-            get => _value.ToString(CultureInfo.InvariantCulture);
-            set
-            {
-                bool isParsed = TryParse(value, out double parsed);
-                if (!isParsed) return;
-                _value = parsed;
-            }
-        }
     }
 }

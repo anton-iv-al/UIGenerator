@@ -63,6 +63,7 @@
     <Compile Include="ModelGenerator\ModelAccessor.cs" />
     <Compile Include="ModelGenerator\Parameters\ButtonParam.cs" />
     <Compile Include="ModelGenerator\Parameters\DoubleParam.cs" />
+    <Compile Include="ModelGenerator\Parameters\FeedbackStringParam.cs" />
     <Compile Include="ModelGenerator\Parameters\IModelParam.cs" />
     <Compile Include="ModelGenerator\Parameters\IntParam.cs" />
     <Compile Include="ModelGenerator\Parameters\StringParam.cs" />

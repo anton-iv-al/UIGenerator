@@ -16,7 +16,7 @@ namespace Starter
 
         private static void Button1Click(TestModel model)
         {
-            Console.WriteLine("button1 clicked, int1 * double1 = " + model.Int1 * model.Double1);
+            model.SetResult("button1 clicked, int1 * double1 = " + model.Int1 * model.Double1);
         }
     }
 }

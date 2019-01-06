@@ -63,16 +63,5 @@ namespace UIGenerator.ModelGenerator.Parameters
         }
 
         public string Name => _name;
-
-        public string Value
-        {
-            get => _value.ToString();
-            set
-            {
-                bool isParsed = TryParse(value, out int parsed);
-                if (!isParsed) return;
-                _value = parsed;
-            }
-        }
     }
 }

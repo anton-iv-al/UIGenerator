@@ -30,7 +30,7 @@ namespace UIGenerator.ModelGenerator.Parameters
         {
             void OnClick()
             {
-                TriggerEvent(_model, _eventInfo.Name, new[] {_model});
+                TriggerEvent(_model, _eventInfo.Name, new[] {Clone(_model)});
             }
             
             window.AddButton(
@@ -58,12 +58,12 @@ namespace UIGenerator.ModelGenerator.Parameters
             } 
         }
 
-        public string Name => _name;
-
-        public string Value
+        private object Clone(object original)
         {
-            get => null;
-            set { return; }
+            var memberwiseClone = original.GetType().GetMethod("MemberwiseClone", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            return memberwiseClone.Invoke(original, null);
         }
+
+        public string Name => _name;
     }
 }
