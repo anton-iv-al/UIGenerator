@@ -13,9 +13,8 @@ namespace UIGenerator.ModelGenerator.Parameters
 
         private readonly EventInfo _eventInfo;
         private readonly object _model;
-        private readonly Action _onClickFromModelAccessor;
 
-        public ButtonParam(EventInfo eventInfo, object model, Action onClick)
+        public ButtonParam(EventInfo eventInfo, object model)
         {
             var nameAttribute = eventInfo.GetCustomAttribute(typeof(DisplayNameAttribute)) as DisplayNameAttribute;
             var labelText = nameAttribute != null ? nameAttribute.DisplayName : eventInfo.Name;
@@ -25,14 +24,12 @@ namespace UIGenerator.ModelGenerator.Parameters
 
             _eventInfo = eventInfo;
             _model = model;
-            _onClickFromModelAccessor = onClick;
         }
 
         public void AddToWindow(MainWindow window)
         {
             void OnClick()
             {
-                _onClickFromModelAccessor();
                 TriggerEvent(_model, _eventInfo.Name, new[] {_model});
             }
             

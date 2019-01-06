@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UIGenerator.ModelGenerator;
 
 namespace UIGenerator.Views.Main {
     /// <summary>
@@ -62,7 +63,11 @@ namespace UIGenerator.Views.Main {
                 Content = buttonText,
             };
 
-            element.Click += (sender, args) => onClick();
+            element.Click += (sender, args) =>
+            {
+                SaveConfiguration();
+                onClick();
+            };
             
             AddNewRow(labelText, element);
         }
@@ -90,18 +95,24 @@ namespace UIGenerator.Views.Main {
             this.RegisterName(element.Name, element);;
         }
 
-//        public string DirectoryText {
-//            get => DirectoryControl.Text;
-//            set => DirectoryControl.Text = value;
-//        }
-//
-//        public int SizeText {
-//            get => int.Parse(SizeControl.Text);
-//            set => SizeControl.Text = value.ToString();
-//        }
-//
-//        private void CutButtonControl_Click(object sender, RoutedEventArgs e) {
-//            _presenter.OnCutButtonClick();
-//        }
+        public void SetTextByName(string name, string text)
+        {
+            var textBox = this.FindName(name) as TextBox;
+            if (textBox == null) return;
+            textBox.Text = text ?? "";
+        }
+
+        private void SaveConfiguration()
+        {
+            var valuesByName = new Dictionary<string, string>();
+            foreach (var child in MainGrid.Children)
+            {
+                var textBox = child as TextBox;
+                if(textBox == null) continue;
+                valuesByName[textBox.Name] = textBox.Text;
+            }
+
+            ConfigurationHelper.SaveConfiguration(valuesByName);
+        }
     }
 }

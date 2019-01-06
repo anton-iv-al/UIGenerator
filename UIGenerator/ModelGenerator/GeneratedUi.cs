@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,9 +24,14 @@ namespace UIGenerator.ModelGenerator
         {
             var modelAccessor = new ModelAccessor<TModel>(model);
 
-            foreach (var param in modelAccessor.Params)
+            foreach (var param in modelAccessor.ParamsForWindow())
             {
                 param.AddToWindow(window);
+            }
+
+            foreach (KeyValuePair<string,string> pair in ConfigurationHelper.LoadConfiguration())
+            {
+                window.SetTextByName(pair.Key, pair.Value);
             }
         }
     }
