@@ -58,6 +58,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ModelGenerator\ConfigurationHelper.cs" />
     <Compile Include="ModelGenerator\GeneratedUi.cs" />
     <Compile Include="ModelGenerator\ModelAccessor.cs" />
     <Compile Include="ModelGenerator\Parameters\ButtonParam.cs" />

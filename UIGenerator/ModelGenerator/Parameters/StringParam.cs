@@ -9,7 +9,7 @@ namespace UIGenerator.ModelGenerator.Parameters
     {
         private readonly string _name;
         private readonly string _labelText;
-        private readonly string _defaultValue;
+        private string _value;
 
         private readonly PropertyInfo _propertyInfo;
         private readonly object _model;
@@ -21,7 +21,7 @@ namespace UIGenerator.ModelGenerator.Parameters
 
             _name = propertyInfo.Name;
             _labelText = labelText;
-            _defaultValue = propertyInfo.GetValue(model) as string;
+            _value = propertyInfo.GetValue(model) as string;
 
             _propertyInfo = propertyInfo;
             _model = model;
@@ -32,12 +32,18 @@ namespace UIGenerator.ModelGenerator.Parameters
             window.AddTextBox(
                 _name, 
                 _labelText, 
-                _defaultValue, 
+                _value, 
                 s => _propertyInfo.SetValue(_model, s),
                 s => true
             );
         }
 
         public string Name => _name;
+        
+        public string Value
+        {
+            get => _value;
+            set => _value = value;
+        }
     }
 }

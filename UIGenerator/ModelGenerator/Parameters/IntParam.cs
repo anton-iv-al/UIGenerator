@@ -10,7 +10,7 @@ namespace UIGenerator.ModelGenerator.Parameters
     {
         private readonly string _name;
         private readonly string _labelText;
-        private readonly int _defaultValue;
+        private int _value;
 
         private readonly PropertyInfo _propertyInfo;
         private readonly object _model;
@@ -22,7 +22,7 @@ namespace UIGenerator.ModelGenerator.Parameters
 
             _name = propertyInfo.Name;
             _labelText = labelText;
-            _defaultValue = (int)propertyInfo.GetValue(model);
+            _value = (int)propertyInfo.GetValue(model);
 
             _propertyInfo = propertyInfo;
             _model = model;
@@ -32,12 +32,7 @@ namespace UIGenerator.ModelGenerator.Parameters
         {
             void OnChange(string s)
             {
-                bool isParsed = int.TryParse(
-                    s,
-                    NumberStyles.Integer,
-                    CultureInfo.InvariantCulture,
-                    out int parsed
-                    );
+                bool isParsed = TryParse(s, out int parsed);
                 
                 if (!isParsed) return;
                 _propertyInfo.SetValue(_model, parsed);
@@ -45,23 +40,39 @@ namespace UIGenerator.ModelGenerator.Parameters
             
             bool IsValid(string s)
             {
-                return int.TryParse(
-                    s,
-                    NumberStyles.Integer,
-                    CultureInfo.InvariantCulture,
-                    out int parsed
-                    );
+                return TryParse(s, out int parsed);
             }
             
             window.AddTextBox(
                 _name, 
                 _labelText, 
-                _defaultValue.ToString(), 
+                _value.ToString(), 
                 OnChange,
                 IsValid
             );
         }
 
+        private bool TryParse(string s, out int parsed)
+        {
+            return int.TryParse(
+                s,
+                NumberStyles.Integer,
+                CultureInfo.InvariantCulture,
+                out parsed
+            );
+        }
+
         public string Name => _name;
+
+        public string Value
+        {
+            get => _value.ToString();
+            set
+            {
+                bool isParsed = TryParse(value, out int parsed);
+                if (!isParsed) return;
+                _value = parsed;
+            }
+        }
     }
 }
