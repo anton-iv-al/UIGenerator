@@ -19,17 +19,14 @@ namespace UIGenerator.Views.Main {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        private MainPresenter _presenter;
+        public MainPresenter presenter;
 
         public MainWindow() {
             InitializeComponent();
-            _presenter = new MainPresenter(this);
-            
-            AddTextBox("name1", "name1Label", null);
-            AddButton("name2", "name2Label", "name2Button", () => { (this.FindName("name1") as TextBox).Text = "changed!!!"; });
+            presenter = new MainPresenter(this);
         }
 
-        public void AddTextBox(string name, string labelText, string defaultValue)
+        public void AddTextBox(string name, string labelText, string defaultValue, Action<string> onChange)
         {
             var element = new TextBox()
             {
@@ -40,6 +37,8 @@ namespace UIGenerator.Views.Main {
             {
                 element.Text = defaultValue;
             }
+
+            element.TextChanged += (sender, args) => onChange(element.Text);
             
             AddNewRow(labelText, element);
         }
@@ -62,22 +61,22 @@ namespace UIGenerator.Views.Main {
             var row = new RowDefinition() {Height = GridLength.Auto};
             MainGrid.RowDefinitions.Add(row);
             int rowIndex = MainGrid.RowDefinitions.Count - 1;
-            
+
             var label = new Label()
             {
-                Content = labelText, 
+                Content = labelText,
                 Foreground = Brushes.White,
             };
-            
+
             Grid.SetColumn(label, 0);
             Grid.SetRow(label, rowIndex);
             MainGrid.Children.Add(label);
-            
+
             Grid.SetColumn(element, 1);
             Grid.SetRow(element, rowIndex);
             MainGrid.Children.Add(element);
-            
-            this.RegisterName(element.Name, element);
+
+            this.RegisterName(element.Name, element);;
         }
 
 //        public string DirectoryText {

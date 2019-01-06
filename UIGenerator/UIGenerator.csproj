@@ -58,6 +58,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ModelGenerator\GeneratedUi.cs" />
+    <Compile Include="ModelGenerator\ModelAccessor.cs" />
+    <Compile Include="ModelGenerator\Parameters\ButtonParam.cs" />
+    <Compile Include="ModelGenerator\Parameters\IModelParam.cs" />
+    <Compile Include="ModelGenerator\Parameters\StringParam.cs" />
     <Compile Include="Views\Main\MainPresenter.cs" />
     <Compile Include="Views\Presenter.cs" />
     <Page Include="Views\Main\MainWindow.xaml">
