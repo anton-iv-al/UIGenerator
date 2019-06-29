@@ -54,6 +54,37 @@ namespace UIGenerator.Views.Main {
             
             AddNewRow(labelText, element);
         }
+        
+        public void AddCheckBox(string name, string labelText, bool defaultValue, Action<bool> onChange)
+        {
+            var element = new CheckBox()
+            {
+                Name = name,
+            };
+
+            element.IsChecked = defaultValue;
+
+            void OnChange(object sender, RoutedEventArgs args)
+            {
+                if (element.IsChecked != null)
+                {
+                    element.Background = Brushes.White;
+                }
+                else
+                {
+                    element.Background = Brushes.Red;
+                    return;
+                }
+                
+                onChange(element.IsChecked.Value);
+            }
+
+            element.Checked += OnChange;
+            element.Unchecked += OnChange;
+            
+            
+            AddNewRow(labelText, element);
+        }
 
         public void AddButton(string name, string labelText, string buttonText, Action onClick)
         {
@@ -111,19 +142,30 @@ namespace UIGenerator.Views.Main {
 
         public void SetTextByName(string name, string text)
         {
-            var textBox = this.FindName(name) as TextBox;
-            if (textBox == null) return;
-            textBox.Text = text ?? "";
+            var elem = this.FindName(name);
+            if (elem is TextBox textBox)
+            {
+                textBox.Text = text ?? "";
+            }
+            else if (elem is CheckBox checkBox)
+            {
+                if (text != null) checkBox.IsChecked = bool.Parse(text);
+            }
         }
 
         private void SaveConfiguration()
         {
             var valuesByName = new Dictionary<string, string>();
-            foreach (var child in MainGrid.Children)
+            foreach (var elem in MainGrid.Children)
             {
-                var textBox = child as TextBox;
-                if(textBox == null) continue;
-                valuesByName[textBox.Name] = textBox.Text;
+                if (elem is TextBox textBox)
+                {
+                    valuesByName[textBox.Name] = textBox.Text;
+                }
+                else if (elem is CheckBox checkBox)
+                {
+                    valuesByName[checkBox.Name] = (checkBox.IsChecked != null && checkBox.IsChecked.Value).ToString();
+                }
             }
 
             ConfigurationHelper.SaveConfiguration(valuesByName);

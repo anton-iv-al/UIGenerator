@@ -59,6 +59,7 @@
     <Compile Include="ModelGenerator\ConfigurationHelper.cs" />
     <Compile Include="ModelGenerator\GeneratedUi.cs" />
     <Compile Include="ModelGenerator\ModelAccessor.cs" />
+    <Compile Include="ModelGenerator\Parameters\BoolParam.cs" />
     <Compile Include="ModelGenerator\Parameters\ButtonParam.cs" />
     <Compile Include="ModelGenerator\Parameters\DoubleParam.cs" />
     <Compile Include="ModelGenerator\Parameters\FeedbackStringParam.cs" />

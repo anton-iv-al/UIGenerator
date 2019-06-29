@@ -26,17 +26,21 @@ namespace UIGenerator.ModelGenerator
             IEnumerable<IModelParam> stringParams = typeof(TModel).GetProperties()
                 .Where(pi => pi.PropertyType == typeof(string))
                 .Select(pi => new StringParam(pi, model));
-            
+
             IEnumerable<IModelParam> intParams = typeof(TModel).GetProperties()
                 .Where(pi => pi.PropertyType == typeof(int))
                 .Select(pi => new IntParam(pi, model));
-            
+
             IEnumerable<IModelParam> doubleParams = typeof(TModel).GetProperties()
                 .Where(pi => pi.PropertyType == typeof(double))
                 .Select(pi => new DoubleParam(pi, model));
             
+            IEnumerable<IModelParam> boolParams = typeof(TModel).GetProperties()
+                .Where(pi => pi.PropertyType == typeof(bool))
+                .Select(pi => new BoolParam(pi, model));
+
             IEnumerable<IModelParam> buttonParams = typeof(TModel).GetEvents()
-                .Select(ei => new ButtonParam(ei, model));
+                .Select(pi => new ButtonParam(pi, model));
             
             IEnumerable<IModelParam> feedBackStringParams = typeof(TModel).GetProperties()
                 .Where(pi => pi.PropertyType == typeof(Action<string>))
@@ -46,6 +50,7 @@ namespace UIGenerator.ModelGenerator
             return stringParams
                 .Concat(intParams)
                 .Concat(doubleParams)
+                .Concat(boolParams)
                 .Concat(buttonParams)
                 .Concat(feedBackStringParams);
         }

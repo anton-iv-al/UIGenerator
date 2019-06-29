@@ -13,6 +13,8 @@ namespace Starter
         public double Double1 { get; set; } = 4;
         
         public int Int1 { get; set; } = 5;
+
+        public bool Bool1 { get; set; } = true;
         
         [DisplayName("label of Button1")]
         public event Action<TestModel> Button1;
