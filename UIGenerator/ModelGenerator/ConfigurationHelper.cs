@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using YamlDotNet.Serialization;
+using System.Runtime.Serialization.Json;
 
 namespace UIGenerator.ModelGenerator
 {
     public static class ConfigurationHelper
     {    // IEnumerable<IModelParam>
         public static void SaveConfiguration(Dictionary<string, string> configParams) {
-            string serializedParams = new SerializerBuilder().Build().Serialize(configParams);
-
             try {
-                File.WriteAllText(ConfigurationFilePath(), serializedParams);
+                DataContractJsonSerializer jsonFormatter = new DataContractJsonSerializer(typeof(Dictionary<string, string>));
+                using (FileStream fs = new FileStream(ConfigurationFilePath(), FileMode.Create))
+                {
+                    jsonFormatter.WriteObject(fs, configParams);
+                }
             }
             catch (Exception) {
                 return;
@@ -20,8 +22,11 @@ namespace UIGenerator.ModelGenerator
 
         public static Dictionary<string, string> LoadConfiguration() {
             try {
-                string serializedParams = File.ReadAllText(ConfigurationFilePath());
-                return new DeserializerBuilder().Build().Deserialize<Dictionary<string, string>>(serializedParams);
+                DataContractJsonSerializer jsonFormatter = new DataContractJsonSerializer(typeof(Dictionary<string, string>));
+                using (FileStream fs = new FileStream(ConfigurationFilePath(), FileMode.Open))
+                {
+                    return jsonFormatter.ReadObject(fs) as Dictionary<string, string>;
+                }
             }
             catch (Exception) {
                 return new Dictionary<string, string>();
@@ -29,7 +34,7 @@ namespace UIGenerator.ModelGenerator
         }
 
         private static string ConfigurationFilePath() {
-            return "configuration.yaml";
+            return "configuration.json";
         }
     }
 }
